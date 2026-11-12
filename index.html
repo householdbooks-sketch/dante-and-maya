@@ -1032,7 +1032,7 @@
       <div class="section-head">
         <span class="section-kicker">Speak Life EP • Studio Previews</span>
         <h2 class="section-title">The Complete 5-Track Sound</h2>
-        <p class="section-sub">Listen to official 30-second studio previews. Full masters available across all platforms on release day.</p>
+        <p class="section-sub">Listen to official studio previews. Full masters available across all platforms on release day.</p>
       </div>
 
       <div class="ep-grid">
@@ -1051,12 +1051,12 @@
               <span style="font-size: 11px; font-weight: 800; color: var(--cyan); text-transform: uppercase; letter-spacing: 0.1em;">Selected Preview</span>
               <div id="epTrackTitle" style="font-size: 18px; font-weight: 700; color: #fff; margin-top: 2px;">05 - In My Hand (Everything We Need)</div>
             </div>
-            <span style="font-size: 12px; font-weight: 700; color: var(--gold); background: rgba(245, 158, 11, 0.15); padding: 4px 10px; border-radius: 99px;">30s STUDIO CUT</span>
+            <span style="font-size: 12px; font-weight: 700; color: var(--gold); background: rgba(245, 158, 11, 0.15); padding: 4px 10px; border-radius: 99px;">STUDIO PREVIEW</span>
           </div>
 
           <!-- Tracklist -->
           <div class="tracklist">
-            <div class="track-row" data-src="audio/01_Stronger_You.mp3" data-title="01 - Stronger You" data-dur="0:30">
+            <div class="track-row" data-src="audio/01_Stronger_You.mp3" data-title="01 - Stronger You" data-dur="0:45">
               <div class="track-left">
                 <div class="track-play-icon">▶</div>
                 <div class="track-name-wrap">
@@ -1064,10 +1064,10 @@
                   <span class="track-tag">Track 01 • Endurance Anthem</span>
                 </div>
               </div>
-              <span class="track-time">0:30</span>
+              <span class="track-time">0:45</span>
             </div>
 
-            <div class="track-row" data-src="audio/02_Walking_in_Favor.mp3" data-title="02 - Walking in Favor" data-dur="0:30">
+            <div class="track-row" data-src="audio/02_Walking_in_Favor.mp3" data-title="02 - Walking in Favor" data-dur="0:45">
               <div class="track-left">
                 <div class="track-play-icon">▶</div>
                 <div class="track-name-wrap">
@@ -1075,10 +1075,10 @@
                   <span class="track-tag">Track 02 • Kingdom Blessing</span>
                 </div>
               </div>
-              <span class="track-time">0:30</span>
+              <span class="track-time">0:45</span>
             </div>
 
-            <div class="track-row" data-src="audio/03_Stay_Here_Take_It_Slow.mp3" data-title="03 - Stay Here, Take It Slow" data-dur="0:30">
+            <div class="track-row" data-src="audio/03_Stay_Here_Take_It_Slow.mp3" data-title="03 - Stay Here, Take It Slow" data-dur="0:45">
               <div class="track-left">
                 <div class="track-play-icon">▶</div>
                 <div class="track-name-wrap">
@@ -1086,10 +1086,10 @@
                   <span class="track-tag">Track 03 • Sabbath Rest & Devotion</span>
                 </div>
               </div>
-              <span class="track-time">0:30</span>
+              <span class="track-time">0:45</span>
             </div>
 
-            <div class="track-row" data-src="audio/04_Purpose_Has_A_Season.mp3" data-title="04 - Purpose Has A Season" data-dur="0:30">
+            <div class="track-row" data-src="audio/04_Purpose_Has_A_Season.mp3" data-title="04 - Purpose Has A Season" data-dur="0:45">
               <div class="track-left">
                 <div class="track-play-icon">▶</div>
                 <div class="track-name-wrap">
@@ -1097,10 +1097,10 @@
                   <span class="track-tag">Track 04 • Ecclesiastes Timing</span>
                 </div>
               </div>
-              <span class="track-time">0:30</span>
+              <span class="track-time">0:45</span>
             </div>
 
-            <div class="track-row active" data-src="audio/05_In_My_Hand.mp3" data-title="05 - In My Hand (Everything We Need)" data-dur="0:30">
+            <div class="track-row active" data-src="audio/05_In_My_Hand.mp3" data-title="05 - In My Hand (Everything We Need)" data-dur="0:45">
               <div class="track-left">
                 <div class="track-play-icon">▶</div>
                 <div class="track-name-wrap">
@@ -1108,7 +1108,7 @@
                   <span class="track-tag">Track 05 • Covenant Breakthrough</span>
                 </div>
               </div>
-              <span class="track-time">0:30</span>
+              <span class="track-time">0:45</span>
             </div>
           </div>
         </div>
@@ -1233,7 +1233,7 @@
         </div>
         <div class="scrubber-times">
           <span id="floatCurrent">0:00</span>
-          <span id="floatDuration">0:30</span>
+          <span id="floatDuration">0:45</span>
         </div>
       </div>
     </div>
@@ -1327,13 +1327,35 @@
       }
     });
 
+    // Video & Audio mutual pause (prevents phasing / overlapping sounds)
+    const videoEl = document.querySelector('video');
+    if (videoEl) {
+      videoEl.addEventListener('play', () => {
+        if (!audio.paused) {
+          audio.pause();
+          playBtn.textContent = '▶';
+          if (trackRows[currentTrack]) {
+            trackRows[currentTrack].querySelector('.track-play-icon').textContent = '▶';
+          }
+        }
+      });
+    }
+
+    // When audio plays, pause video
+    audio.addEventListener('play', () => {
+      if (videoEl && !videoEl.paused) {
+        videoEl.pause();
+      }
+    });
+
+    // When track ends: stop cleanly without abrupt auto-advance
     audio.addEventListener('ended', () => {
-      if (currentTrack < trackRows.length - 1) {
-        selectTrack(currentTrack + 1, true);
-      } else {
-        playBtn.textContent = '▶';
+      playBtn.textContent = '▶';
+      if (trackRows[currentTrack]) {
         trackRows[currentTrack].querySelector('.track-play-icon').textContent = '▶';
       }
+      fill.style.width = '0%';
+      currentEl.textContent = '0:00';
     });
 
     scrubber.addEventListener('click', (e) => {
