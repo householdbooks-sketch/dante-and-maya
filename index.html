@@ -468,7 +468,7 @@
       padding-bottom: 56.25%; /* 16:9 */
       height: 0;
     }
-    .video-frame-inner video {
+    .video-frame-inner video, .video-frame-inner iframe {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
       border: none;
@@ -1021,13 +1021,16 @@
 
       <div class="video-frame-outer">
         <div class="video-frame-inner">
-          <video controls preload="metadata" poster="images/thumb_landscape.png">
-            <source src="Speak_Life_Breakthrough_Master_16x9.mp4" type="video/mp4">
-            Your browser does not support the video tag.
-          </video>
+          <iframe 
+            src="https://www.youtube.com/embed/AI32F-QJ6IE?rel=0&modestbranding=1&playsinline=1" 
+            title="Dante and Maya debut single In My Hand (Everything We Need)" 
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" 
+            referrerpolicy="strict-origin-when-cross-origin" 
+            allowfullscreen>
+          </iframe>
         </div>
         <div class="video-bar">
-          <span class="video-tag">✦ 16:9 Widescreen Master Cut ✦</span>
+          <a href="https://youtu.be/AI32F-QJ6IE?is=NsaDnSn9oPBj50Vo" target="_blank" rel="noopener noreferrer" class="video-tag" style="text-decoration: none;">✦ Watch on YouTube ✦</a>
           <a href="https://youtube.com/channel/UCpWZyPboWWJa4wudTFtm3Zg?si=x4qFPTfQKAmu-LMj" target="_blank" rel="noopener noreferrer" style="color: var(--cyan); text-decoration: none; font-size: 13px; font-weight: 700; display: inline-flex; align-items: center; gap: 6px;">▶ Subscribe on YouTube</a>
           <span style="font-size: 13px; color: var(--text-dim); font-family: monospace;">2:28 • 1080p Full HD</span>
         </div>
