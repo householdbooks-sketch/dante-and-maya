@@ -1189,7 +1189,7 @@
                   <span class="track-tag">Track 01 • Kingdom Blessing</span>
                 </div>
               </div>
-              <span class="track-time">1:00 <span style="font-size: 10px; opacity: 0.6;">(Full 3:10)</span></span>
+              <span class="track-time">1:00 <span style="font-size: 10px; opacity: 0.6;">(Preview)</span></span>
             </div>
 
             <div class="track-row" data-src="audio/02_Purpose_Has_A_Season.mp3" data-title="02 - Purpose Has A Season" data-dur="1:00">
@@ -1200,18 +1200,18 @@
                   <span class="track-tag">Track 02 • Ecclesiastes Timing</span>
                 </div>
               </div>
-              <span class="track-time">1:00 <span style="font-size: 10px; opacity: 0.6;">(Full 4:13)</span></span>
+              <span class="track-time">1:00 <span style="font-size: 10px; opacity: 0.6;">(Preview)</span></span>
             </div>
 
-            <div class="track-row active" data-src="audio/03_In_My_Hand.mp3" data-title="03 - In My Hand (Everything We Need)" data-dur="1:00">
+            <div class="track-row active" data-src="audio/03_In_My_Hand.mp3" data-title="03 - In My Hand (Everything We Need)" data-dur="3:17">
               <div class="track-left">
                 <div class="track-play-icon">▶</div>
                 <div class="track-name-wrap">
                   <span class="track-name">In My Hand (Everything We Need) <span class="lead-pill">Lead Single</span></span>
-                  <span class="track-tag">Track 03 • Covenant Breakthrough</span>
+                  <span class="track-tag">Track 03 • Covenant Breakthrough • Full Song Stream</span>
                 </div>
               </div>
-              <span class="track-time">1:00 <span style="font-size: 10px; opacity: 0.6;">(Full 3:17)</span></span>
+              <span class="track-time" style="color: var(--cyan); font-weight: 700;">3:17 <span style="font-size: 10px; background: rgba(0, 242, 254, 0.15); border: 1px solid rgba(0, 242, 254, 0.4); border-radius: 99px; padding: 2px 6px; margin-left: 4px;">Full Song</span></span>
             </div>
 
             <div class="track-row" data-src="audio/04_Stronger_You.mp3" data-title="04 - Stronger You" data-dur="1:00">
@@ -1222,7 +1222,7 @@
                   <span class="track-tag">Track 04 • Endurance Anthem</span>
                 </div>
               </div>
-              <span class="track-time">1:00 <span style="font-size: 10px; opacity: 0.6;">(Full 3:21)</span></span>
+              <span class="track-time">1:00 <span style="font-size: 10px; opacity: 0.6;">(Preview)</span></span>
             </div>
 
             <div class="track-row" data-src="audio/05_Be_Spent_Not_Saved.mp3" data-title="05 - Be Spent, Not Saved" data-dur="1:00">
@@ -1233,7 +1233,7 @@
                   <span class="track-tag">Track 05 • Kingdom Sacrifice</span>
                 </div>
               </div>
-              <span class="track-time">1:00 <span style="font-size: 10px; opacity: 0.6;">(Full 4:16)</span></span>
+              <span class="track-time">1:00 <span style="font-size: 10px; opacity: 0.6;">(Preview)</span></span>
             </div>
 
             <div class="track-row" data-src="audio/06_The_Best_of_Always.mp3" data-title="06 - The Best of Always" data-dur="1:00">
@@ -1244,7 +1244,7 @@
                   <span class="track-tag">Track 06 • Covenant Promise</span>
                 </div>
               </div>
-              <span class="track-time">1:00 <span style="font-size: 10px; opacity: 0.6;">(Full 3:26)</span></span>
+              <span class="track-time">1:00 <span style="font-size: 10px; opacity: 0.6;">(Preview)</span></span>
             </div>
 
             <div class="track-row" data-src="audio/07_Kingdom_in_the_Ruins_Bonus.mp3" data-title="07 - Kingdom in the Ruins (Bonus Track)" data-dur="1:00">
@@ -1255,7 +1255,7 @@
                   <span class="track-tag">Track 07 • Reconstruction</span>
                 </div>
               </div>
-              <span class="track-time">1:00 <span style="font-size: 10px; opacity: 0.6;">(Full 5:58)</span></span>
+              <span class="track-time">1:00 <span style="font-size: 10px; opacity: 0.6;">(Preview)</span></span>
             </div>
           </div>
         </div>
@@ -1634,7 +1634,11 @@
     const trackRows = document.querySelectorAll('.track-row');
 
     let currentTrack = 2; // Default to Track 03 (Lead Single)
-    const PREVIEW_LIMIT = 60; // 60 seconds preview limit for public site
+    const PREVIEW_LIMIT = 60; // 60 seconds preview limit for tracks except Lead Single (Track 03)
+
+    function isFullTrack(idx) {
+      return idx === 2; // Track 03: "In My Hand (Everything We Need)" plays in full
+    }
 
     function selectTrack(index, playNow = false) {
       currentTrack = index;
@@ -1647,11 +1651,12 @@
       const selected = trackRows[index];
       const src = selected.getAttribute('data-src');
       const title = selected.getAttribute('data-title');
+      const full = isFullTrack(index);
 
       audio.src = src;
       titleEl.textContent = title;
       epTitleEl.textContent = title;
-      durEl.textContent = '1:00';
+      durEl.textContent = full ? '3:17' : '1:00';
 
       hidePreviewPrompt();
 
@@ -1669,8 +1674,9 @@
     selectTrack(2, false);
 
     playBtn.addEventListener('click', () => {
+      const full = isFullTrack(currentTrack);
       if (audio.paused) {
-        if (audio.currentTime >= PREVIEW_LIMIT) {
+        if (!full && audio.currentTime >= PREVIEW_LIMIT) {
           audio.currentTime = 0;
           hidePreviewPrompt();
         }
@@ -1686,7 +1692,9 @@
     });
 
     audio.addEventListener('timeupdate', () => {
-      if (audio.currentTime >= PREVIEW_LIMIT) {
+      const full = isFullTrack(currentTrack);
+
+      if (!full && audio.currentTime >= PREVIEW_LIMIT) {
         audio.pause();
         audio.currentTime = PREVIEW_LIMIT;
         playBtn.textContent = '▶';
@@ -1699,11 +1707,20 @@
         return;
       }
 
-      const pct = (audio.currentTime / PREVIEW_LIMIT) * 100;
-      fill.style.width = Math.min(100, pct) + '%';
+      const totalCap = full ? (audio.duration || 197) : PREVIEW_LIMIT;
+      if (totalCap > 0) {
+        const pct = (audio.currentTime / totalCap) * 100;
+        fill.style.width = Math.min(100, pct) + '%';
+      }
       const mins = Math.floor(audio.currentTime / 60);
       const secs = Math.floor(audio.currentTime % 60);
       currentEl.textContent = `${mins}:${secs < 10 ? '0' : ''}${secs}`;
+
+      if (full && audio.duration) {
+        const dMins = Math.floor(audio.duration / 60);
+        const dSecs = Math.floor(audio.duration % 60);
+        durEl.textContent = `${dMins}:${dSecs < 10 ? '0' : ''}${dSecs}`;
+      }
     });
 
     function showPreviewPrompt() {
@@ -1748,11 +1765,13 @@
     });
 
     scrubber.addEventListener('click', (e) => {
+      const full = isFullTrack(currentTrack);
+      const totalCap = full ? (audio.duration || 197) : PREVIEW_LIMIT;
       const rect = scrubber.getBoundingClientRect();
       const pos = Math.max(0, Math.min(1, (e.clientX - rect.left) / rect.width));
-      const targetTime = pos * PREVIEW_LIMIT;
+      const targetTime = pos * totalCap;
       audio.currentTime = targetTime;
-      if (targetTime < PREVIEW_LIMIT) {
+      if (!full && targetTime < PREVIEW_LIMIT) {
         hidePreviewPrompt();
       }
     });
